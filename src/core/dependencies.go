@@ -5,6 +5,7 @@ import (
     "apiConsumer/src/orders/application"
     "apiConsumer/src/orders/infrastructure"
     "log"
+    "os"
 
     "github.com/gin-gonic/gin"
 )
@@ -48,7 +49,13 @@ func InitRoutes() {
     router.GET("/order/:id", getOrderByIdController.Execute)
     router.GET("/orders/cellphone/:cellphone", getOrderByCellphoneController.Execute)
 
-    if err := router.Run(":8082"); err != nil {
+    port := os.Getenv("PORT")
+    if port == "" {
+        port = "8082"
+    }
+
+    if err := router.Run(":" + port); err != nil {
         log.Fatalf("Error al iniciar el servidor: %v", err)
     }
+
 }
