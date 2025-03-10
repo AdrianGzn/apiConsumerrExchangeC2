@@ -17,7 +17,9 @@ func NewMysqlRepository(db *sql.DB) *MysqlRepository {
 }
 
 func (repo *MysqlRepository) Save(order *domain.Order) error {
-	order.Status = "pendiente" //pendiente al crear
+	order.Status = "pendiente"
+	
+	go runWebsocket(order);
 
 	query := "INSERT INTO orders (name, description, price, userName, userCellphone, status) VALUES (?, ?, ?, ?, ?, ?)"
 	result, err := repo.db.Exec(query, order.Name, order.Description, order.Price, order.UserName, order.UserCellphone, order.Status)
